@@ -26,8 +26,8 @@ public class User {
     private String password;
     @Column(nullable = false)
     private BigDecimal balance;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "auth_id", nullable = false)
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(

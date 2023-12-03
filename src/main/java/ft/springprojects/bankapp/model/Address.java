@@ -3,8 +3,6 @@ package ft.springprojects.bankapp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
-
 @Entity
 @Table(name = "address")
 @Getter
@@ -23,6 +21,6 @@ public class Address {
     private String street;
     @Column(nullable = false)
     private String streetNumber;
-    @OneToMany(mappedBy = "address")
-    private Set<User> users;
+    @OneToOne(mappedBy = "address")
+    private User user;
 }

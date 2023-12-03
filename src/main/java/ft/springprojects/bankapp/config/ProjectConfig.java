@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class ProjectConfig {
 
     @Bean
-    public PlatformTransactionManager platformTransactionManager(){
+    public PlatformTransactionManager transactionManager(){
         return new JpaTransactionManager();
     }
 
