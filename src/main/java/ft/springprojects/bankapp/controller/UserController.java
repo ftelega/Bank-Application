@@ -18,4 +18,10 @@ public class UserController {
     public void createUser(@RequestBody UserDTO userDTO){
         userService.createUser(userDTO);
     }
+
+    @GetMapping(path = "/login")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void login(){
+        userService.login();
+    }
 }

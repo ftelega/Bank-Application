@@ -29,7 +29,7 @@ public class User {
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_auth",
             joinColumns = @JoinColumn(name = "user_id", nullable = false),
