@@ -1,7 +1,6 @@
 package ft.springprojects.bankapp.service;
 
 import ft.springprojects.bankapp.dto.UserDTO;
-import ft.springprojects.bankapp.model.Authority;
 import ft.springprojects.bankapp.model.User;
 import ft.springprojects.bankapp.repository.UserRepository;
 import ft.springprojects.bankapp.util.Mapper;

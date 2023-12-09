@@ -26,7 +26,7 @@ public class User {
     private String password;
     @Column(nullable = false)
     private BigDecimal balance;
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

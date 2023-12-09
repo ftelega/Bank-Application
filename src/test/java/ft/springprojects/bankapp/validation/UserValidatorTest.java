@@ -28,7 +28,7 @@ class UserValidatorTest {
         given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 
         assertDoesNotThrow(() -> {
-            userValidator.validateUser(new UserDTO(CORRECT_USERNAME, CORRECT_EMAIL, CORRECT_PASSWORD, null, null));
+            userValidator.validateUser(CORRECT_USERDTO);
         });
     }
 
@@ -38,7 +38,7 @@ class UserValidatorTest {
         given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 
         assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO(null, CORRECT_EMAIL, CORRECT_PASSWORD, null, null));
+            userValidator.validateUser(EMPTY_USERNAME_USERDTO);
         });
     }
 
@@ -48,17 +48,7 @@ class UserValidatorTest {
         given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 
         assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO("", CORRECT_EMAIL, CORRECT_PASSWORD, null, null));
-        });
-    }
-
-    @Test
-    public void givenInvalidUsername3_whenValidateUser_thenException(){
-        given(userRepository.findByUsername(any())).willReturn(Optional.empty());
-        given(userRepository.findByEmail(any())).willReturn(Optional.empty());
-
-        assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO("***", CORRECT_EMAIL, CORRECT_PASSWORD, null, null));
+            userValidator.validateUser(NULL_USERNAME_USERDTO);
         });
     }
 
@@ -68,7 +58,7 @@ class UserValidatorTest {
         given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 
         assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO(CORRECT_USERNAME, null, CORRECT_PASSWORD, null, null));
+            userValidator.validateUser(EMPTY_EMAIL_USERDTO);
         });
     }
 
@@ -78,17 +68,7 @@ class UserValidatorTest {
         given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 
         assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO(CORRECT_USERNAME, "", CORRECT_PASSWORD, null, null));
-        });
-    }
-
-    @Test
-    public void givenInvalidEmail3_whenValidateUser_thenException(){
-        given(userRepository.findByUsername(any())).willReturn(Optional.empty());
-        given(userRepository.findByEmail(any())).willReturn(Optional.empty());
-
-        assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO(CORRECT_USERNAME, "***", CORRECT_PASSWORD, null, null));
+            userValidator.validateUser(NULL_EMAIL_USERDTO);
         });
     }
 
@@ -98,7 +78,7 @@ class UserValidatorTest {
         given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 
         assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO(CORRECT_USERNAME, CORRECT_EMAIL, null, null, null));
+            userValidator.validateUser(EMPTY_PASSWORD_USERDTO);
         });
     }
 
@@ -108,17 +88,7 @@ class UserValidatorTest {
         given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 
         assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO(CORRECT_USERNAME, CORRECT_EMAIL, "", null, null));
-        });
-    }
-
-    @Test
-    public void givenInvalidPassword3_whenValidateUser_thenException(){
-        given(userRepository.findByUsername(any())).willReturn(Optional.empty());
-        given(userRepository.findByEmail(any())).willReturn(Optional.empty());
-
-        assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO(CORRECT_USERNAME, CORRECT_EMAIL, "***", null, null));
+            userValidator.validateUser(NULL_PASSWORD_USERDTO);
         });
     }
 
@@ -128,7 +98,7 @@ class UserValidatorTest {
         given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 
         assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO(CORRECT_USERNAME, CORRECT_EMAIL, CORRECT_EMAIL, null, null));
+            userValidator.validateUser(CORRECT_USERDTO);
         });
     }
 
@@ -138,7 +108,7 @@ class UserValidatorTest {
         given(userRepository.findByEmail(any())).willReturn(Optional.of(new User()));
 
         assertThrows(UserException.class, () -> {
-            userValidator.validateUser(new UserDTO(CORRECT_USERNAME, CORRECT_EMAIL, CORRECT_EMAIL, null, null));
+            userValidator.validateUser(CORRECT_USERDTO);
         });
     }
 }

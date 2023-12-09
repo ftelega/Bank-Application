@@ -1,14 +1,12 @@
 package ft.springprojects.bankapp.service;
 
-import ft.springprojects.bankapp.dto.AddressDTO;
 import ft.springprojects.bankapp.dto.UserDTO;
+import ft.springprojects.bankapp.model.UserException;
 import ft.springprojects.bankapp.repository.UserRepository;
 import ft.springprojects.bankapp.validation.AddressValidator;
 import ft.springprojects.bankapp.validation.UserValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -21,36 +19,36 @@ class UserServiceTest {
     private final UserValidator userValidator;
     private final AddressValidator addressValidator;
     private final PasswordEncoder passwordEncoder;
+    private final UserAuthorityService userAuthorityService;
 
     public UserServiceTest() {
         this.userRepository = mock(UserRepository.class);
         this.userValidator = mock(UserValidator.class);
         this.addressValidator = mock(AddressValidator.class);
         this.passwordEncoder = mock(PasswordEncoder.class);
-        this.userService = new UserServiceImpl(userRepository, passwordEncoder, userValidator, addressValidator, mock(UserAuthorityService.class));
+        this.userAuthorityService = mock(UserAuthorityService.class);
+        this.userService = new UserServiceImpl(userRepository, passwordEncoder, userValidator, addressValidator, userAuthorityService);
     }
 
     @Test
     public void givenUser_whenCreateUser_thenPersist(){
-        UserDTO userDTO = new UserDTO(
-                CORRECT_USERNAME,
-                CORRECT_EMAIL,
-                CORRECT_PASSWORD,
-                BigDecimal.ZERO,
-                new AddressDTO(CORRECT_CITY, CORRECT_STREET, CORRECT_STNUMBER)
-        );
+        userService.createUser(CORRECT_USERDTO);
 
-        userService.createUser(userDTO);
-
-        verify(userValidator, times(1)).validateUser(userDTO);
-        verify(addressValidator, times(1)).validateAddress(userDTO.address());
+        verify(userValidator, times(1)).validateUser(CORRECT_USERDTO);
+        verify(addressValidator, times(1)).validateAddress(CORRECT_USERDTO.address());
         verify(passwordEncoder, times(1)).encode(any());
         verify(userRepository, times(1)).save(any());
+        verify(userAuthorityService, times(1)).getAuthority("USER");
     }
 
     @Test
     public void givenUserValidatorThrowsException_whenCreateUser_thenNotPersist(){
+        doThrow(UserException.class).when(userValidator).validateUser(any());
 
+        assertThrows(UserException.class, () -> userService.createUser(CORRECT_USERDTO));
+
+        verify(userValidator, times(1)).validateUser(CORRECT_USERDTO);
+        verify(userRepository, times(0)).save(any());
     }
 
     @Test
