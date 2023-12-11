@@ -14,6 +14,7 @@ public class TestUtil {
     public static final String CORRECT_STREET = "Street";
     public static final String CORRECT_STNUMBER = "12/34";
     public static final String TEST_AUTHORITY = "TEST";
+    public static final String VALID_JWT = null;
     public static final AddressDTO CORRECT_ADDRESSDTO = new AddressDTO(
             CORRECT_CITY,
             CORRECT_STREET,

@@ -18,22 +18,18 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
     private String username;
-    @Column(nullable = false)
     private String email;
-    @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
     private BigDecimal balance;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", nullable = false)
+    @JoinColumn(name = "address_id")
     private Address address;
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_auth",
-            joinColumns = @JoinColumn(name = "user_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "auth_id", nullable = false))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "auth_id"))
     private Set<Authority> authorities;
     @OneToMany(mappedBy = "fromUser")
     private Set<Transaction> transactionsSent;

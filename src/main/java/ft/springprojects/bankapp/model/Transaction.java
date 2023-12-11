@@ -18,14 +18,12 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
-    @Column(nullable = false)
     private BigDecimal amount;
-    @Column(nullable = false)
     private String title;
     @ManyToOne
-    @JoinColumn(name = "from_user", nullable = false)
+    @JoinColumn(name = "from_user")
     private User fromUser;
     @ManyToOne
-    @JoinColumn(name = "to_user", nullable = false)
+    @JoinColumn(name = "to_user")
     private User toUser;
 }
