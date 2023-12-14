@@ -1,6 +1,6 @@
 package ft.springprojects.bankapp.service;
 
-import ft.springprojects.bankapp.dto.UserDTO;
+import ft.springprojects.bankapp.model.AddressException;
 import ft.springprojects.bankapp.model.UserException;
 import ft.springprojects.bankapp.repository.UserRepository;
 import ft.springprojects.bankapp.validation.AddressValidator;
@@ -53,6 +53,11 @@ class UserServiceTest {
 
     @Test
     public void givenAddressValidatorThrowsException_whenCreateUser_thenNotPersist(){
+        doThrow(AddressException.class).when(addressValidator).validateAddress(any());
 
+        assertThrows(AddressException.class, () -> userService.createUser(CORRECT_USERDTO));
+
+        verify(addressValidator, times(1)).validateAddress(CORRECT_USERDTO.address());
+        verify(userRepository, times(0)).save(any());
     }
 }

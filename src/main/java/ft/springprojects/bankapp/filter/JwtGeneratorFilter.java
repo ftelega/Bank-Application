@@ -1,6 +1,5 @@
 package ft.springprojects.bankapp.filter;
 
-import ft.springprojects.bankapp.config.SecurityConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
@@ -41,7 +40,7 @@ public class JwtGeneratorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return !request.getServletPath().equals("/api/v1/user/login");
+        return !request.getRequestURI().equals("/api/v1/user/login");
     }
 
     private String getAuthoritiesAsString(Collection<? extends GrantedAuthority> authorities){

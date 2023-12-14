@@ -14,7 +14,10 @@ public class TestUtil {
     public static final String CORRECT_STREET = "Street";
     public static final String CORRECT_STNUMBER = "12/34";
     public static final String TEST_AUTHORITY = "TEST";
-    public static final String VALID_JWT = null;
+    public static final String VALID_JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKV1QiLCJlbWFpbCI6InRlc3QiLCJhdXRob3JpdGllcyI6IlVTRVIiLCJpYXQiOjE3MDI1NTQ4NjcsImV4cCI6MTcwMjU4MzY2N30.1Mvxh8D-lhO7CnjnH8KMFJ9DHJlUa10_MbZqeRyIOBw3xi9kEy9esxqXA6yTIyP1CWORyss4mnksWUEcfSbg_Q";
+    public static final String JWT_HEADER = "jwt";
+    public static final String TEST_SECURITY_PRINCIPAL = "test";
+    public static final String TEST_SECURITY_CREDENTIALS = "test";
     public static final AddressDTO CORRECT_ADDRESSDTO = new AddressDTO(
             CORRECT_CITY,
             CORRECT_STREET,

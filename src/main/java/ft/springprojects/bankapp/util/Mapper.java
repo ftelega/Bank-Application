@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class Mapper {
 
-    public static final User mapToUser(UserDTO userDTO){
+    public static User mapToUser(UserDTO userDTO){
         return User.builder()
                 .username(userDTO.username())
                 .email(userDTO.email())
@@ -22,7 +22,7 @@ public class Mapper {
                 .build();
     }
 
-    public static final Address mapToAddress(AddressDTO addressDTO){
+    public static Address mapToAddress(AddressDTO addressDTO){
         return Address.builder()
                 .city(addressDTO.city())
                 .street(addressDTO.street())

@@ -25,9 +25,10 @@ public class UserFlowTest extends BaseTest {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserFlowTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+    public UserFlowTest(MockMvc mockMvc, ObjectMapper objectMapper, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
+        userRepository.save(User.builder().email(TEST_SECURITY_PRINCIPAL).password(passwordEncoder.encode(TEST_SECURITY_CREDENTIALS)).build());
     }
 
     @Test
@@ -40,5 +41,29 @@ public class UserFlowTest extends BaseTest {
         );
 
         res.andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void givenCorrectHttpBasicCredentials_whenLoggingIn_thenStatusOk() throws Exception {
+
+        ResultActions res = mockMvc.perform(MockMvcRequestBuilders
+                .get("http://localhost:8080/api/v1/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic(TEST_SECURITY_PRINCIPAL, TEST_SECURITY_CREDENTIALS))
+        );
+
+        res.andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void givenIncorrectHttpBasicCredentials_whenLoggingIn_thenStatusOk() throws Exception {
+
+        ResultActions res = mockMvc.perform(MockMvcRequestBuilders
+                .get("http://localhost:8080/api/v1/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic("awd", "awd"))
+        );
+
+        res.andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 }
