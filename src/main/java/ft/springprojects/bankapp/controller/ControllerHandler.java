@@ -1,8 +1,10 @@
 package ft.springprojects.bankapp.controller;
 
 import ft.springprojects.bankapp.dto.AddressExceptionDTO;
+import ft.springprojects.bankapp.dto.TransactionExceptionDTO;
 import ft.springprojects.bankapp.dto.UserExceptionDTO;
 import ft.springprojects.bankapp.model.AddressException;
+import ft.springprojects.bankapp.model.TransactionException;
 import ft.springprojects.bankapp.model.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,15 @@ public class ControllerHandler {
     @ExceptionHandler(value = AddressException.class)
     public ResponseEntity<AddressExceptionDTO> handleAddressException(AddressException e){
         return ResponseEntity.status(e.getStatus()).body(new AddressExceptionDTO(
+                e.getStatus().value(),
+                dateTimeFormatter.format(e.getTime()),
+                e.getMessage()
+        ));
+    }
+
+    @ExceptionHandler(value = TransactionException.class)
+    public ResponseEntity<TransactionExceptionDTO> handleTransactionException(TransactionException e){
+        return ResponseEntity.status(e.getStatus()).body(new TransactionExceptionDTO(
                 e.getStatus().value(),
                 dateTimeFormatter.format(e.getTime()),
                 e.getMessage()

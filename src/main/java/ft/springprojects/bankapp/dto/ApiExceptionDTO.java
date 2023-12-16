@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ApiExceptionDTO {
+public abstract class ApiExceptionDTO {
         private final int status;
         private final String time;
         private final String message;
