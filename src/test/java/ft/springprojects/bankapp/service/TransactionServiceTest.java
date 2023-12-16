@@ -1,0 +1,53 @@
+package ft.springprojects.bankapp.service;
+
+import ft.springprojects.bankapp.model.TransactionException;
+import ft.springprojects.bankapp.repository.TransactionRepository;
+import ft.springprojects.bankapp.validation.TransactionValidator;
+import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
+
+class TransactionServiceTest {
+
+    private final TransactionService transactionService;
+    private final TransactionValidator transactionValidator;
+    private final TransactionRepository transactionRepository;
+    private final UserTransactionService userTransactionService;
+
+    public TransactionServiceTest() {
+        this.transactionValidator = mock(TransactionValidator.class);
+        this.transactionRepository = mock(TransactionRepository.class);
+        this.userTransactionService = mock(UserTransactionService.class);
+        this.transactionService = new TransactionServiceImpl(transactionRepository, transactionValidator, userTransactionService);
+    }
+
+    @Test
+    public void whenTransferring_thenVerifyCalls(){
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("principal", null));
+
+        transactionService.transfer(null, null);
+
+        verify(transactionValidator, times(1)).validateTransfer(any(), any(), any());
+        verify(userTransactionService, times(1)).getTransferSender(any());
+        verify(userTransactionService, times(1)).getTransferReceiver(any());
+        verify(transactionRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void givenValidatorThrowsException_whenTransferring_thenThrowException(){
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("principal", null));
+        doThrow(TransactionException.class).when(transactionValidator).validateTransfer(any(), any(), any());
+
+        assertThrows(TransactionException.class, () -> {
+            transactionService.transfer(null, null);
+        });
+
+        verify(transactionValidator, times(1)).validateTransfer(any(), any(), any());
+        verify(userTransactionService, times(0)).getTransferSender(any());
+        verify(userTransactionService, times(0)).getTransferReceiver(any());
+        verify(transactionRepository, times(0)).save(any());
+    }
+}

@@ -19,7 +19,6 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     private BigDecimal amount;
-    private String title;
     @ManyToOne
     @JoinColumn(name = "from_user")
     private User fromUser;
