@@ -1,7 +1,6 @@
 package ft.springprojects.bankapp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ft.springprojects.bankapp.model.User;
 import ft.springprojects.bankapp.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +18,17 @@ import static ft.springprojects.bankapp.TestUtil.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class UserFlowTest extends BaseTest {
+public class UserFlowTest extends BaseSecurityTest {
 
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
     @Autowired
     public UserFlowTest(MockMvc mockMvc, ObjectMapper objectMapper, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        super(userRepository, passwordEncoder);
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
-        userRepository.save(User.builder().email(TEST_SECURITY_PRINCIPAL).password(passwordEncoder.encode(TEST_SECURITY_CREDENTIALS)).build());
+
     }
 
     @Test
