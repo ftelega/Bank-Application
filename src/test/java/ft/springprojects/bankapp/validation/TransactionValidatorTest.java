@@ -24,10 +24,10 @@ class TransactionValidatorTest {
     @Test
     public void givenRepositoryFindsSenderAndReceiver_whenValidatingTransfer_thenNotThrowException(){
         given(userRepository.findByEmail(any())).willReturn(Optional.of(User.builder().balance(BigDecimal.TEN).build()));
-        given(userRepository.findById(any())).willReturn(Optional.of(new User()));
+        given(userRepository.findById(any())).willReturn(Optional.of(User.builder().email("test").build()));
 
         assertDoesNotThrow(() -> {
-            transactionValidator.validateTransfer(BigDecimal.ZERO, null, null);
+            transactionValidator.validateTransfer(BigDecimal.TEN, null, null);
         });
     }
 
@@ -47,7 +47,7 @@ class TransactionValidatorTest {
         given(userRepository.findById(any())).willReturn(Optional.of(new User()));
 
         assertThrows(TransactionException.class, () -> {
-            transactionValidator.validateTransfer(BigDecimal.ZERO, null, null);
+            transactionValidator.validateTransfer(BigDecimal.TEN, null, null);
         });
     }
 
@@ -55,6 +55,27 @@ class TransactionValidatorTest {
     public void givenInvalidReceiverId_whenValidatingTransfer_thenThrowException(){
         given(userRepository.findByEmail(any())).willReturn(Optional.of(User.builder().balance(BigDecimal.TEN).build()));
         given(userRepository.findById(any())).willReturn(Optional.empty());
+
+        assertThrows(TransactionException.class, () -> {
+            transactionValidator.validateTransfer(BigDecimal.TEN, null, null);
+        });
+    }
+
+    @Test
+    public void givenSenderAndReceiverSameId_whenValidatingTransfer_thenThrowException(){
+        String principal = "Test";
+        given(userRepository.findByEmail(any())).willReturn(Optional.of(User.builder().balance(BigDecimal.TEN).build()));
+        given(userRepository.findById(any())).willReturn(Optional.of(User.builder().email(principal).build()));
+
+        assertThrows(TransactionException.class, () -> {
+            transactionValidator.validateTransfer(BigDecimal.TEN, principal, null);
+        });
+    }
+
+    @Test
+    public void givenIncorrectAmount_whenValidatingTransfer_thenThrowException(){
+        given(userRepository.findByEmail(any())).willReturn(Optional.of(User.builder().balance(BigDecimal.ZERO).build()));
+        given(userRepository.findById(any())).willReturn(Optional.of(User.builder().email("test").build()));
 
         assertThrows(TransactionException.class, () -> {
             transactionValidator.validateTransfer(BigDecimal.ZERO, null, null);
