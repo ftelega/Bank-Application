@@ -28,7 +28,6 @@ public class UserFlowTest extends BaseSecurityTest {
         super(userRepository, passwordEncoder);
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
-
     }
 
     @Test
