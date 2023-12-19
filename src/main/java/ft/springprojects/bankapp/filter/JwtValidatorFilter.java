@@ -55,6 +55,7 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
     }
 
     private Collection<? extends GrantedAuthority> getAuthoritiesFromString(String authorities){
+        if(authorities == null) return null;
         String[] authoritiesArray = authorities.split(", ");
         Set<GrantedAuthority> res = new HashSet<>();
         for(String auth : authoritiesArray){

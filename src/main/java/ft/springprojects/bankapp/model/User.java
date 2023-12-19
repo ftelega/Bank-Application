@@ -31,8 +31,8 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "auth_id"))
     private Set<Authority> authorities;
-    @OneToMany(mappedBy = "fromUser")
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.REMOVE)
     private Set<Transaction> transactionsSent;
-    @OneToMany(mappedBy = "toUser")
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.REMOVE)
     private Set<Transaction> transactionsReceived;
 }

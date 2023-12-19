@@ -55,7 +55,7 @@ public class UserFlowTest extends BaseSecurityTest {
     }
 
     @Test
-    public void givenIncorrectHttpBasicCredentials_whenLoggingIn_thenStatusOk() throws Exception {
+    public void givenIncorrectHttpBasicCredentials_whenLoggingIn_thenStatusUnauthorized() throws Exception {
 
         ResultActions res = mockMvc.perform(MockMvcRequestBuilders
                 .get("http://localhost:8080/api/v1/user/login")

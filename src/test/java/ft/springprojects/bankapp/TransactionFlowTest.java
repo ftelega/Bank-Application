@@ -62,4 +62,19 @@ public class TransactionFlowTest extends BaseSecurityTest{
         res.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    public void givenExistingUserAndCorrectAmountWithInvalidToken_whenTransferring_thenStatusUnauthorized() throws Exception{
+        User user = userRepository.save(User.builder().email("awd").build());
+
+        ResultActions res = mockMvc.perform(MockMvcRequestBuilders
+                .post("http://localhost:8080/api/v1/transaction/transfer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("receiver", String.valueOf(user.getId()))
+                .param("amount", String.valueOf(BigDecimal.TEN))
+                .header(JWT_HEADER, "awd")
+        );
+
+        res.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+
 }
