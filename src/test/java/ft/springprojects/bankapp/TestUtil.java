@@ -1,9 +1,17 @@
 package ft.springprojects.bankapp;
 
+import ft.springprojects.bankapp.config.SecurityConstants;
 import ft.springprojects.bankapp.dto.AddressDTO;
 import ft.springprojects.bankapp.dto.UserDTO;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
+import javax.crypto.SecretKey;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+
+import static ft.springprojects.bankapp.config.SecurityConstants.*;
 
 public class TestUtil {
 
@@ -14,8 +22,18 @@ public class TestUtil {
     public static final String CORRECT_STREET = "Street";
     public static final String CORRECT_STNUMBER = "12/34";
     public static final String TEST_AUTHORITY = "TEST";
-    public static final String VALID_JWT = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKV1QiLCJlbWFpbCI6InRlc3QiLCJhdXRob3JpdGllcyI6IlVTRVIiLCJpYXQiOjE3MDI1NTQ4NjcsImV4cCI6MTcwMjU4MzY2N30.1Mvxh8D-lhO7CnjnH8KMFJ9DHJlUa10_MbZqeRyIOBw3xi9kEy9esxqXA6yTIyP1CWORyss4mnksWUEcfSbg_Q";
-    public static final String JWT_HEADER = "jwt";
+    public static final String JWT_HEADER = SecurityConstants.JWT_HEADER;
+    public static String generateJwt(String principal, String authorities){
+        SecretKey key = Keys.hmacShaKeyFor(JWT_KEY.getBytes(StandardCharsets.UTF_8));
+        String jwt = Jwts.builder()
+                .setSubject("JWT")
+                .claim("email", principal)
+                .claim("authorities", authorities)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + EXPIRATION_TIME))
+                .signWith(key).compact();
+        return jwt;
+    }
     public static final String TEST_SECURITY_PRINCIPAL = "test";
     public static final String TEST_SECURITY_CREDENTIALS = "test";
     public static final AddressDTO CORRECT_ADDRESSDTO = new AddressDTO(

@@ -5,6 +5,8 @@ import ft.springprojects.bankapp.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.math.BigDecimal;
+
 import static ft.springprojects.bankapp.TestUtil.*;
 
 public class BaseSecurityTest extends BaseTest{
@@ -20,6 +22,11 @@ public class BaseSecurityTest extends BaseTest{
     @BeforeEach
     public void setup(){
         userRepository.deleteAll();
-        userRepository.save(User.builder().email(TEST_SECURITY_PRINCIPAL).password(passwordEncoder.encode(TEST_SECURITY_CREDENTIALS)).build());
+        userRepository.save(User.builder()
+                .email(TEST_SECURITY_PRINCIPAL)
+                .password(passwordEncoder.encode(TEST_SECURITY_CREDENTIALS))
+                .balance(BigDecimal.valueOf(1_000_000))
+                .build()
+        );
     }
 }
