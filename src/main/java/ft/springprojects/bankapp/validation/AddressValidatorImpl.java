@@ -17,6 +17,7 @@ public class AddressValidatorImpl implements AddressValidator {
     private static final Pattern STNUMBER_PATTERN = Pattern.compile("^\\d+(?:/\\d+)?$");
     @Override
     public void validateAddress(AddressDTO addressDTO) {
+        if(addressDTO == null) throw new AddressException(AddressExceptions.INVALID_ADDRESS, HttpStatus.BAD_REQUEST, LocalDateTime.now());
         validateCity(addressDTO.city());
         validateStreet(addressDTO.street());
         validateStreetNumber(addressDTO.streetNumber());

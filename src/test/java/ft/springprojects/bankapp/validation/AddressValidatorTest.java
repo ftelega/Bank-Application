@@ -62,4 +62,11 @@ class AddressValidatorTest {
             addressValidator.validateAddress(NULL_STNUMBER_ADDRESSDTO);
         });
     }
+
+    @Test
+    public void givenNoAddress_whenValidate_thenException(){
+        assertThrows(AddressException.class, () -> {
+            addressValidator.validateAddress(null);
+        });
+    }
 }

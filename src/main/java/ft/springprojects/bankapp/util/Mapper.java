@@ -5,6 +5,7 @@ import ft.springprojects.bankapp.dto.UserDTO;
 import ft.springprojects.bankapp.model.Address;
 import ft.springprojects.bankapp.model.User;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 
 public class Mapper {
@@ -14,7 +15,7 @@ public class Mapper {
                 .username(userDTO.username())
                 .email(userDTO.email())
                 .password(userDTO.password())
-                .balance(userDTO.balance())
+                .balance(BigDecimal.ZERO)
                 .address(mapToAddress(userDTO.address()))
                 .authorities(new HashSet<>())
                 .transactionsSent(new HashSet<>())

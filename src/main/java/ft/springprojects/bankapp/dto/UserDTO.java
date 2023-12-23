@@ -6,7 +6,6 @@ public record UserDTO(
         String username,
         String email,
         String password,
-        BigDecimal balance,
         AddressDTO address
 ) {
 }
