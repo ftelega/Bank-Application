@@ -81,4 +81,31 @@ class TransactionValidatorTest {
             transactionValidator.validateTransfer(BigDecimal.ZERO, null, null);
         });
     }
+
+    @Test
+    public void givenCorrectSenderAndAmount_whenValidatingDeposit_thenNotThrowException(){
+        given(userRepository.findByEmail(any())).willReturn(Optional.of(User.builder().balance(BigDecimal.TEN).build()));
+
+        assertDoesNotThrow(() -> {
+            transactionValidator.validateDeposit(BigDecimal.TEN, null);
+        });
+    }
+
+    @Test
+    public void givenIncorrectSender_whenValidatingDeposit_thenNotThrowException(){
+        given(userRepository.findByEmail(any())).willReturn(Optional.empty());
+
+        assertThrows(TransactionException.class, () -> {
+            transactionValidator.validateDeposit(BigDecimal.TEN, null);
+        });
+    }
+
+    @Test
+    public void givenIncorrectAmount_whenValidatingDeposit_thenNotThrowException(){
+        given(userRepository.findByEmail(any())).willReturn(Optional.of(User.builder().balance(BigDecimal.TEN).build()));
+
+         assertThrows(TransactionException.class, () -> {
+            transactionValidator.validateDeposit(BigDecimal.ZERO, null);
+        });
+    }
 }

@@ -45,49 +45,42 @@ public class TestUtil {
             CORRECT_USERNAME,
             CORRECT_EMAIL,
             CORRECT_PASSWORD,
-            BigDecimal.ZERO,
             CORRECT_ADDRESSDTO
     );
     public static final UserDTO EMPTY_USERNAME_USERDTO = new UserDTO(
             "",
             CORRECT_EMAIL,
             CORRECT_PASSWORD,
-            BigDecimal.ZERO,
             new AddressDTO(CORRECT_CITY, CORRECT_STREET, CORRECT_STNUMBER)
     );
     public static final UserDTO EMPTY_EMAIL_USERDTO = new UserDTO(
             CORRECT_USERNAME,
             "",
             CORRECT_PASSWORD,
-            BigDecimal.ZERO,
             new AddressDTO(CORRECT_CITY, CORRECT_STREET, CORRECT_STNUMBER)
     );
     public static final UserDTO EMPTY_PASSWORD_USERDTO = new UserDTO(
             CORRECT_USERNAME,
             CORRECT_EMAIL,
             "",
-            BigDecimal.ZERO,
             new AddressDTO(CORRECT_CITY, CORRECT_STREET, CORRECT_STNUMBER)
     );
     public static final UserDTO NULL_USERNAME_USERDTO = new UserDTO(
             null,
             CORRECT_EMAIL,
             CORRECT_PASSWORD,
-            BigDecimal.ZERO,
             new AddressDTO(CORRECT_CITY, CORRECT_STREET, CORRECT_STNUMBER)
     );
     public static final UserDTO NULL_EMAIL_USERDTO = new UserDTO(
             CORRECT_USERNAME,
             null,
             CORRECT_PASSWORD,
-            BigDecimal.ZERO,
             new AddressDTO(CORRECT_CITY, CORRECT_STREET, CORRECT_STNUMBER)
     );
     public static final UserDTO NULL_PASSWORD_USERDTO = new UserDTO(
             CORRECT_USERNAME,
             CORRECT_EMAIL,
             null,
-            BigDecimal.ZERO,
             new AddressDTO(CORRECT_CITY, CORRECT_STREET, CORRECT_STNUMBER)
     );
     public static final AddressDTO EMPTY_CITY_ADDRESSDTO = new AddressDTO(

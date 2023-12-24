@@ -4,4 +4,5 @@ import java.math.BigDecimal;
 
 public interface TransactionValidator {
     void validateTransfer(BigDecimal amount, String principal, Long receiverId);
+    void validateDeposit(BigDecimal amount, String principal);
 }

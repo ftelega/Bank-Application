@@ -21,19 +21,28 @@ public class TransactionValidatorImpl implements TransactionValidator {
     @Override
     public void validateTransfer(BigDecimal amount, String principal, Long receiverId) {
         validateAmount(amount);
-        validateSender(principal, amount);
+        validateSenderBalance(principal, amount);
         validateReceiver(receiverId, principal);
+    }
+
+    @Override
+    public void validateDeposit(BigDecimal amount, String principal) {
+        validateAmount(amount);
+        validateSender(principal);
     }
 
     private void validateAmount(BigDecimal amount){
         if(amount.compareTo(BigDecimal.ZERO) <= 0) throw new TransactionException(TransactionExceptions.INVALID_AMOUNT, HttpStatus.BAD_REQUEST, LocalDateTime.now());
     }
 
-    private void validateSender(String principal, BigDecimal amount){
+    private void validateSender(String principal){
         Optional<User> senderOptional = userRepository.findByEmail(principal);
         if(senderOptional.isEmpty()) throw new TransactionException(TransactionExceptions.INVALID_SENDER, HttpStatus.BAD_REQUEST, LocalDateTime.now());
-        User sender = senderOptional.get();
-        if(sender.getBalance().compareTo(amount) < 0) throw new TransactionException(TransactionExceptions.NOT_ENOUGH_BALANCE, HttpStatus.BAD_REQUEST, LocalDateTime.now());
+    }
+
+    private void validateSenderBalance(String principal, BigDecimal amount){
+        validateSender(principal);
+        if(userRepository.findByEmail(principal).get().getBalance().compareTo(amount) < 0) throw new TransactionException(TransactionExceptions.NOT_ENOUGH_BALANCE, HttpStatus.BAD_REQUEST, LocalDateTime.now());
     }
 
     private void validateReceiver(Long receiverId, String principal){
