@@ -1,12 +1,20 @@
 package ft.springprojects.bankapp.service;
 
 import ft.springprojects.bankapp.model.AddressException;
+import ft.springprojects.bankapp.model.TransactionException;
+import ft.springprojects.bankapp.model.User;
 import ft.springprojects.bankapp.model.UserException;
 import ft.springprojects.bankapp.repository.UserRepository;
 import ft.springprojects.bankapp.validation.AddressValidator;
+import ft.springprojects.bankapp.validation.TransactionValidator;
 import ft.springprojects.bankapp.validation.UserValidator;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -20,6 +28,7 @@ class UserServiceTest {
     private final AddressValidator addressValidator;
     private final PasswordEncoder passwordEncoder;
     private final UserAuthorityService userAuthorityService;
+    private final TransactionValidator transactionValidator;
 
     public UserServiceTest() {
         this.userRepository = mock(UserRepository.class);
@@ -27,7 +36,8 @@ class UserServiceTest {
         this.addressValidator = mock(AddressValidator.class);
         this.passwordEncoder = mock(PasswordEncoder.class);
         this.userAuthorityService = mock(UserAuthorityService.class);
-        this.userService = new UserServiceImpl(userRepository, passwordEncoder, userValidator, addressValidator, userAuthorityService);
+        this.transactionValidator = mock(TransactionValidator.class);
+        this.userService = new UserServiceImpl(userRepository, passwordEncoder, userValidator, addressValidator, userAuthorityService, transactionValidator);
     }
 
     @Test
@@ -58,6 +68,33 @@ class UserServiceTest {
         assertThrows(AddressException.class, () -> userService.createUser(CORRECT_USERDTO));
 
         verify(addressValidator, times(1)).validateAddress(CORRECT_USERDTO.address());
+        verify(userRepository, times(0)).save(any());
+    }
+
+    @Test
+    public void whenDepositing_thenVerifyCalls(){
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("principal", null));
+        given(userRepository.findByEmail(any())).willReturn(Optional.of(User.builder().balance(BigDecimal.TEN).build()));
+
+        userService.deposit(BigDecimal.TEN);
+
+        verify(transactionValidator, times(1)).validateDeposit(any(), any());
+        verify(userRepository, times(1)).findByEmail(any());
+        verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void givenTransactionValidatorThrowsException_whenDepositing_thenThrowException(){
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("principal", null));
+        given(userRepository.findByEmail(any())).willReturn(Optional.of(User.builder().balance(BigDecimal.TEN).build()));
+        doThrow(TransactionException.class).when(transactionValidator).validateDeposit(any(), any());
+
+        assertThrows(TransactionException.class, () -> {
+            userService.deposit(BigDecimal.TEN);
+        });
+
+        verify(transactionValidator, times(1)).validateDeposit(any(), any());
+        verify(userRepository, times(0)).findByEmail(any());
         verify(userRepository, times(0)).save(any());
     }
 }

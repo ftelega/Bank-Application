@@ -4,6 +4,7 @@ import ft.springprojects.bankapp.model.Transaction;
 import ft.springprojects.bankapp.model.User;
 import ft.springprojects.bankapp.repository.TransactionRepository;
 import ft.springprojects.bankapp.validation.TransactionValidator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class TransactionServiceImpl implements TransactionService{
     private final UserTransactionService userTransactionService;
 
     @Override
+    @Transactional
     public void transfer(BigDecimal amount, Long receiverId) {
         String principal = SecurityContextHolder.getContext().getAuthentication().getName();
         transactionValidator.validateTransfer(amount, principal, receiverId);

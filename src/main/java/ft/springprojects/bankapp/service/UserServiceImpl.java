@@ -5,6 +5,7 @@ import ft.springprojects.bankapp.model.User;
 import ft.springprojects.bankapp.repository.UserRepository;
 import ft.springprojects.bankapp.util.Mapper;
 import ft.springprojects.bankapp.validation.AddressValidator;
+import ft.springprojects.bankapp.validation.TransactionValidator;
 import ft.springprojects.bankapp.validation.UserValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserValidator userValidator;
     private final AddressValidator addressValidator;
     private final UserAuthorityService userAuthorityService;
+    private final TransactionValidator transactionValidator;
 
     @Transactional
     @Override
@@ -39,5 +43,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void login() {
         log.info("user {} has logged in", SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    @Override
+    @Transactional
+    public void deposit(BigDecimal amount) {
+        String principal = SecurityContextHolder.getContext().getAuthentication().getName();
+        transactionValidator.validateDeposit(amount, principal);
+        User user = userRepository.findByEmail(principal).get();
+        user.setBalance(user.getBalance().add(amount));
+        userRepository.save(user);
     }
 }
