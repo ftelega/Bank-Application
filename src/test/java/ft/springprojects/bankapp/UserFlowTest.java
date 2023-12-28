@@ -65,4 +65,42 @@ public class UserFlowTest extends BaseSecurityTest {
 
         res.andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
+
+    @Test
+    public void whenDepositing_thenStatusOk() throws Exception {
+
+        ResultActions res = mockMvc.perform(MockMvcRequestBuilders
+                .post("http://localhost:8080/api/v1/user/deposit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("amount", "10")
+                .header(JWT_HEADER, generateJwt(TEST_SECURITY_PRINCIPAL, null))
+        );
+
+        res.andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void givenInvalidAuthentication_whenDepositing_thenStatusUnauthorized() throws Exception {
+
+        ResultActions res = mockMvc.perform(MockMvcRequestBuilders
+                .post("http://localhost:8080/api/v1/user/deposit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("amount", "10")
+        );
+
+        res.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+
+    @Test
+    public void givenInvalidAmount_whenDepositing_thenBadRequest() throws Exception {
+
+        ResultActions res = mockMvc.perform(MockMvcRequestBuilders
+                .post("http://localhost:8080/api/v1/user/deposit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("amount", "0")
+                .header(JWT_HEADER, generateJwt(TEST_SECURITY_PRINCIPAL, null))
+        );
+
+        res.andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }

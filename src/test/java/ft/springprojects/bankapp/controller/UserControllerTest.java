@@ -1,7 +1,9 @@
 package ft.springprojects.bankapp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ft.springprojects.bankapp.enums.TransactionExceptions;
 import ft.springprojects.bankapp.enums.UserExceptions;
+import ft.springprojects.bankapp.model.TransactionException;
 import ft.springprojects.bankapp.model.UserException;
 import ft.springprojects.bankapp.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -61,6 +63,31 @@ class UserControllerTest {
                 .post("http://localhost:8080/api/v1/user/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CORRECT_USERDTO))
+        );
+
+        res.andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void whenDepositing_thenStatusOk() throws Exception {
+
+        ResultActions res = mockMvc.perform(MockMvcRequestBuilders
+                .post("http://localhost:8080/api/v1/user/deposit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("amount", "0")
+        );
+
+        res.andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void givenServiceThrowsException_whenDepositing_thenStatusBadRequest() throws Exception {
+        doThrow(new TransactionException(TransactionExceptions.INVALID_AMOUNT, HttpStatus.BAD_REQUEST, LocalDateTime.now())).when(userService).deposit(any());
+
+        ResultActions res = mockMvc.perform(MockMvcRequestBuilders
+                .post("http://localhost:8080/api/v1/user/deposit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("amount", "0")
         );
 
         res.andExpect(MockMvcResultMatchers.status().isBadRequest());

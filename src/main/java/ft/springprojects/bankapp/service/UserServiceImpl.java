@@ -53,5 +53,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(principal).get();
         user.setBalance(user.getBalance().add(amount));
         userRepository.save(user);
+        log.info("user {} has deposited {} amount", user.getEmail(), amount);
     }
 }

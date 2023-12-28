@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping(path = "/api/v1/user")
 @RequiredArgsConstructor
@@ -23,5 +25,11 @@ public class UserController {
     @ResponseStatus(value = HttpStatus.OK)
     public void login(){
         userService.login();
+    }
+
+    @PostMapping(path = "/deposit")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deposit(@RequestParam(name = "amount") BigDecimal amount) {
+        userService.deposit(amount);
     }
 }
