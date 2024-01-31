@@ -21,6 +21,7 @@ public class TransactionValidatorImpl implements TransactionValidator {
     @Override
     public void validateTransfer(BigDecimal amount, String principal, Long receiverId) {
         validateAmount(amount);
+        validateSender(principal);
         validateSenderBalance(principal, amount);
         validateReceiver(receiverId, principal);
     }
@@ -41,7 +42,6 @@ public class TransactionValidatorImpl implements TransactionValidator {
     }
 
     private void validateSenderBalance(String principal, BigDecimal amount){
-        validateSender(principal);
         if(userRepository.findByEmail(principal).get().getBalance().compareTo(amount) < 0) throw new TransactionException(TransactionExceptions.NOT_ENOUGH_BALANCE, HttpStatus.BAD_REQUEST, LocalDateTime.now());
     }
 

@@ -26,6 +26,7 @@ public class TransactionServiceImpl implements TransactionService{
         transactionValidator.validateTransfer(amount, principal, receiverId);
         User sender = userTransactionService.getTransferSender(principal);
         User receiver = userTransactionService.getTransferReceiver(receiverId);
+        sender.setBalance(sender.getBalance().subtract(amount));
         transactionRepository.save(Transaction.builder()
                 .amount(amount)
                 .fromUser(sender)

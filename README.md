@@ -2,7 +2,7 @@
 This repository contains the source code for a Spring Bank Application. The application provides RESTful endpoints for user management and transactions.  
 
 # Controllers  
-User Controller  
+### User Controller  
 Base Path: /api/v1/user  
 Endpoints: 
 
@@ -15,7 +15,7 @@ Request Body: UserDTO
 Login  
 Method: GET  
 Path: /login  
-Description: Initiates user login. 
+Description: Initiates user login, basic authentication required. If successful, returns as a header a jwt token which then can be used to access other endpoints. 
 
 Deposit  
 Method: POST  
@@ -23,7 +23,7 @@ Path: /deposit
 Description: Deposits an amount to the user's account.  
 Request Parameter: amount (BigDecimal)  
 
-# Transaction Controller
+### Transaction Controller
 Base Path: /api/v1/transaction  
 Endpoints:  
 
